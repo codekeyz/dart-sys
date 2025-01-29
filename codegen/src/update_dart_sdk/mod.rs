@@ -2,7 +2,7 @@ use std::{
 	env,
 	error::Error as StdError,
 	fs::{self, File},
-	io::{self, prelude::*, Error as IoError, ErrorKind as IoErrorKind},
+	io::{self, Error as IoError, ErrorKind as IoErrorKind, prelude::*},
 	path::Path,
 };
 
@@ -57,7 +57,7 @@ pub fn update_dart_sdk() -> Result<(), String> {
 	let arch = match env::consts::ARCH {
 		"x86_64" => "x64",
 		"arm" => "arm",
-		"arm64" => "arm64",
+		"arm64" | "aarch64" => "arm64",
 		"ia32" => "ia32",
 		_ => {
 			log!(LogLevel::Error, "ERROR: unknown/unsupported CPU architecture");
@@ -71,6 +71,8 @@ pub fn update_dart_sdk() -> Result<(), String> {
 		_platform = platform,
 		_arch = arch,
 	);
+
+	println!("Dart SDK download url: {}", dart_sdk_download_url);
 
 	// SHA256 hash to check integrity of the sdk url
 	let dart_sdk_shasum_download_url: String = format!("{}.sha256sum", dart_sdk_download_url);
@@ -295,7 +297,8 @@ pub fn update_dart_sdk() -> Result<(), String> {
 fn download<T, U>(url: T, dest: &U) -> Result<(), Box<dyn StdError>>
 where
 	T: reqwest::IntoUrl,
-	U: AsRef<Path>+std::fmt::Display+?Sized, {
+	U: AsRef<Path> + std::fmt::Display + ?Sized,
+{
 	log!(format!(
 		"Downloading url: \"{}\" (this may take a while, this is normal.)",
 		url.as_str()

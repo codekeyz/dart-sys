@@ -65,14 +65,14 @@ pub fn generate_bindings() -> Result<Bindings, String> {
 				.to_str()
 				.expect("ERROR: could not find path `dart_tools_api.h`"),
 		)
-		.parse_callbacks(Box::new(bindgen::CargoCallbacks))
+		.parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
 		.default_enum_style(bindgen::EnumVariation::NewType {
 			is_bitfield: false,
 			is_global: true,
 		})
 		.use_core()
 		.layout_tests(false)
-		.rustfmt_bindings(false)
+		.formatter(bindgen::Formatter::None)
 		.sort_semantically(true);
 
 	log!(LogLevel::Info, "Generating bindings...");
