@@ -72,8 +72,6 @@ pub fn update_dart_sdk() -> Result<(), String> {
 		_arch = arch,
 	);
 
-	println!("Dart SDK download url: {}", dart_sdk_download_url);
-
 	// SHA256 hash to check integrity of the sdk url
 	let dart_sdk_shasum_download_url: String = format!("{}.sha256sum", dart_sdk_download_url);
 
